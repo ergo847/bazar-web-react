@@ -1,13 +1,25 @@
-import { useState } from "react";
-import BuscadorComponent from "./components/BuscadorComponent";
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+import InicioPage from "./pages/InicioPage";
+
+
+/* import { useState } from "react";
+import BuscadorComponent from "./components/BuscadorComponent"; */
 
 const App = () => {
-  const [busqueda, setBusqueda] = useState(false);
+  /* const [busqueda, setBusqueda] = useState(false); */
 
   return (
     <>
-      {/* div container todo centrado */}
-      <div className="d-flex flex-column min-vh-100 justify-content-center align-items-center text-center">
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<InicioPage />} />
+          <Route path="/productos" element={<h1>Listado</h1>} />
+          <Route path="/productos/:id" element={<h1>Detalle</h1>} />
+        </Routes>
+      </BrowserRouter>
+
+
+      {/* {<div className="d-flex flex-column min-vh-100 justify-content-center align-items-center text-center">
         {busqueda ? (
           <BuscadorComponent />
         ) : (
@@ -15,7 +27,6 @@ const App = () => {
             <h1><i className="fa-solid fa-shop"></i></h1>
             <h1>Bazar Online</h1>
             <div className="input-group mb-3">
-              {/* Corrected the input tag */}
               <input
                 type="text"
                 className="form-control"
@@ -29,7 +40,7 @@ const App = () => {
             </div>
           </div>
         )}
-      </div>
+      </div>} */}
     </>
   );
 };
