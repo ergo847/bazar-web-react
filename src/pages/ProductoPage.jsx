@@ -39,7 +39,7 @@ const ProductoPage = () => {
                             <div className="carousel-inner">
                                 {producto.images.map((image, index) => (
                                     <div key={image.id} className={`carousel-item${index === 0 ? ' active' : ''}`}>
-                                        <img src={image.url} className="d-block w-100" alt={`Imagen ${image.id}`} />
+                                        <img src={image.url} className="d-block w-100 img-height-fixed" alt={`Imagen ${image.id}`} />
                                     </div>
                                 ))}
                             </div>
@@ -63,7 +63,7 @@ const ProductoPage = () => {
                     <p className='text-danger'><span className="fw-bold">Descuento: </span>{producto.discountPercentage}%</p>
                     <p><span className="fw-bold">Rating: </span>{producto.rating}</p>
                     <p><span className="fw-bold">Stock: </span>{producto.stock}</p>
-
+                    <button className="btn btn-primary">Comprar</button>
                 </>
             ) : (
                 <p>Cargando detalles del producto...</p>
