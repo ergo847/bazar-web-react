@@ -4,7 +4,7 @@ import BuscadorComponent from '../components/BuscadorComponent';
 import EstrellasRatingComponent from '../components/EstrellasRatingComponent';
 
 const ProductosPage = () => {
-    const urlApi = 'http://apiexamen.test/api';
+    const urlApi = 'https://bazar-api-laravel-production.up.railway.app/api';
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const query = queryParams.get('search') || '';

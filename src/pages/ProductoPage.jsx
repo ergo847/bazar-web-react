@@ -10,7 +10,7 @@ const ProductoPage = () => {
     useEffect(() => {
         const fetchProducto = async () => {
             try {
-                const response = await fetch(`http://apiexamen.test/api/productos/${id}`);
+                const response = await fetch(`https://bazar-api-laravel-production.up.railway.app/api/productos/${id}`);
                 if (!response.ok) {
                     throw new Error('Error al obtener detalles del producto');
                 }
