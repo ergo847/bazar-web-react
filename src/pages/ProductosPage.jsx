@@ -55,8 +55,8 @@ const ProductosPage = () => {
                             <div className="card-body">
                                 <h5 className="card-title">{producto.title}</h5>
                                 <p className="card-text">{producto.description}</p>
-                                <p className="card-text">Category: {producto.category}</p>
-                                <p className="card-text">Price: ${producto.price}</p>
+                                <p className="card-text">Categoria: {producto.category}</p>
+                                <p className="card-text">Precio: ${producto.price}</p>
                                 <EstrellasRatingComponent rating={parseFloat(producto.rating)} />
                                 <Link to={`/productos/${producto.id}`} className="btn btn-outline-secondary m-1">
                                     Ver Detalles
@@ -88,6 +88,10 @@ const ProductosPage = () => {
         <div className="row">
             <div className="col-12">
                 <h1 className='mt-5'>
+                    {/* boton de regresar */}
+                    <Link to="/" className="btn btn-outline-secondary me-2">
+                        <i className="fa-solid fa-arrow-left"></i>
+                    </Link>
                     <i className="fa-solid fa-shop"></i>
                 </h1>
                 <h1>Listado de Productos</h1>

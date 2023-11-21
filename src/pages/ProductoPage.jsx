@@ -1,6 +1,6 @@
 // ProductoPage.jsx
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import EstrellasRatingComponent from '../components/EstrellasRatingComponent';
 
 const ProductoPage = () => {
@@ -31,6 +31,9 @@ const ProductoPage = () => {
             {producto ? (
                 <>
                     <h1 className='mt-5'>
+                        <Link to="/productos" className="btn btn-outline-secondary me-2">
+                            <i className="fa-solid fa-arrow-left"></i>
+                        </Link>
                         <i className="fa-solid fa-shop"></i>
                     </h1>
                     <h1>{producto.title}</h1>
@@ -61,7 +64,6 @@ const ProductoPage = () => {
                     <p><span className="fw-bold">Categoría: </span>{producto.category}</p>
                     <p><span className="fw-bold">Precio: </span>${producto.price}</p>
                     <p className='text-danger'><span className="fw-bold">Descuento: </span>{producto.discountPercentage}%</p>
-                    <p><span className="fw-bold">Rating: </span>{producto.rating}</p>
                     <p><span className="fw-bold">Stock: </span>{producto.stock}</p>
                     <button className="btn btn-primary">Comprar</button>
                 </>
