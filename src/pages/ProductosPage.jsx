@@ -88,13 +88,14 @@ const ProductosPage = () => {
         <div className="row">
             <div className="col-12">
                 <h1 className='mt-5'>
-                    {/* boton de regresar */}
+                    <i className="fa-solid fa-shop"></i>
+                </h1>
+                <h1>
                     <Link to="/" className="btn btn-outline-secondary me-2">
                         <i className="fa-solid fa-arrow-left"></i>
                     </Link>
-                    <i className="fa-solid fa-shop"></i>
+                    Listado de Productos
                 </h1>
-                <h1>Listado de Productos</h1>
                 <BuscadorComponent />
                 {renderProductos()}
 

@@ -31,12 +31,14 @@ const ProductoPage = () => {
             {producto ? (
                 <>
                     <h1 className='mt-5'>
+                        <i className="fa-solid fa-shop"></i>
+                    </h1>
+                    <h1>
                         <Link to="/productos" className="btn btn-outline-secondary me-2">
                             <i className="fa-solid fa-arrow-left"></i>
                         </Link>
-                        <i className="fa-solid fa-shop"></i>
+                        {producto.title}
                     </h1>
-                    <h1>{producto.title}</h1>
                     {producto.images.length > 0 ? (
                         <div id="carouselExampleControls" className="carousel slide" data-bs-ride="carousel">
                             <div className="carousel-inner">
