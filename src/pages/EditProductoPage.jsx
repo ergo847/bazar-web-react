@@ -82,7 +82,12 @@ const EditProductoPage = () => {
 
     return (
         <div>
-            <h1>Editar {producto.name}</h1>
+            <h1>
+                <Link to={`/producto/${producto.id}`} className="btn btn-outline-secondary ms-2">
+                <i className="fa-solid fa-arrow-left"></i>
+                </Link>
+                Editar {producto?.title}
+            </h1>
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label htmlFor="title" className="form-label">Título</label>
