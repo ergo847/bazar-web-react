@@ -183,7 +183,8 @@ const EditProductoPage = () => {
                 <Link to="/productos" className="btn btn-outline-secondary me-2">
                     <i className="fa-solid fa-arrow-left"></i>
                 </Link>
-                Editar producto
+                {/* si existe el id dice editar producto, si no es crear */}
+                {id ? 'Editar' : 'Crear'} producto
             </h1>
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
