@@ -71,22 +71,42 @@ const EditProductoPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(producto);
-        const requestOptions = {
-            method: 'POST', // Change the method to POST for creating a new product
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(producto),
-        };
-        try {
-            const response = await fetch(`https://bazar-api-laravel-production.up.railway.app/api/productos`, requestOptions);
-            if (!response.ok) {
-                throw new Error('Error al crear el producto');
+        if (id) {
+            const requestOptions = {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(producto),
+            };
+            try {
+                const response = await fetch(`https://bazar-api-laravel-production.up.railway.app/api/productos/${id}`, requestOptions);
+                if (!response.ok) {
+                    throw new Error('Error al actualizar el producto');
+                }
+                const data = await response.json();
+                console.log(data);
+                alert('Producto actualizado');
+            } catch (error) {
+                console.error('Error al actualizar el producto:', error);
+                alert('Error al actualizar el producto');
             }
-            const data = await response.json();
-            console.log(data);
-            alert('Producto creado');
-        } catch (error) {
-            console.error('Error al crear el producto:', error);
-            alert('Error al crear el producto');
+        } else {
+            const requestOptions = {
+                method: 'POST', // Change the method to POST for creating a new product
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(producto),
+            };
+            try {
+                const response = await fetch(`https://bazar-api-laravel-production.up.railway.app/api/productos`, requestOptions);
+                if (!response.ok) {
+                    throw new Error('Error al crear el producto');
+                }
+                const data = await response.json();
+                console.log(data);
+                alert('Producto creado');
+            } catch (error) {
+                console.error('Error al crear el producto:', error);
+                alert('Error al crear el producto');
+            }
         }
     };
     
