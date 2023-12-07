@@ -5,7 +5,7 @@ import { Link, useParams } from 'react-router-dom'
 const EditProductoPage = () => {
     const { id } = useParams();
     const [producto, setProducto] = useState(null);
-    const urlApi = 'https://bazar-api-laravel-production.up.railway.app/api/'
+    const urlApi = 'https://bazar-api-laravel-production.up.railway.app/api/';
 
     useEffect(() => {
         const fetchProducto = async () => {
@@ -32,9 +32,17 @@ const EditProductoPage = () => {
         });
     };
 
+    const handleImagesChange = (e) => {
+        // Trata las imágenes como una lista de URLs separadas por saltos de línea
+        const images = e.target.value.split('\n').filter((url) => url.trim() !== '');
+        setProducto({
+            ...producto,
+            images,
+        });
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        //console.log(producto);
         const requestOptions = {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
@@ -46,8 +54,11 @@ const EditProductoPage = () => {
             .then((data) => {
                 console.log(data);
                 alert('Producto actualizado');
-            }
-        );
+            })
+            .catch((error) => {
+                console.error('Error al actualizar el producto:', error);
+                alert('Error al actualizar el producto');
+            });
     };
 
     /* 
@@ -71,7 +82,7 @@ const EditProductoPage = () => {
 
     return (
         <div>
-            <h1>Edit Producto Page</h1>
+            <h1>Editar {producto.name}</h1>
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label htmlFor="title" className="form-label">Título</label>
@@ -181,15 +192,14 @@ const EditProductoPage = () => {
                 </div>
 
                 <div className="mb-3">
-                    <label htmlFor="images" className="form-label">Imágenes</label>
-                    <input
-                        type="text"
+                    <label htmlFor="images" className="form-label">Imágenes (una URL por línea)</label>
+                    <textarea
                         className="form-control"
                         id="images"
                         name="images"
-                        value={producto?.images}
-                        onChange={handleInputChange}
-                    />
+                        value={producto?.images ? producto.images.join('\n') : ''}
+                        onChange={handleImagesChange}
+                    ></textarea>
                 </div>
 
                 <button type="submit" className="btn btn-primary">Guardar</button>
