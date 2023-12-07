@@ -202,7 +202,7 @@ const EditProductoPage = () => {
                         className="form-control"
                         id="images"
                         name="images"
-                        value={producto?.images ? producto.images.join('\n') : ''}
+                        value={producto?.images ? producto.images.url.join('\n') : ''}
                         onChange={handleImagesChange}
                     ></textarea>
                 </div>
