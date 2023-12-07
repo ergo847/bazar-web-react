@@ -38,6 +38,10 @@ const ProductoPage = () => {
                             <i className="fa-solid fa-arrow-left"></i>
                         </Link>
                         {producto.title}
+                        {/* link to productos/id/edit */}
+                        <Link to={`/producto/${producto.id}/edit`} className="btn btn-outline-secondary ms-2">
+                            <i className="fa-solid fa-edit"></i>
+                        </Link>
                     </h1>
                     {producto.images.length > 0 ? (
                         <div id="carouselExampleControls" className="carousel slide" data-bs-ride="carousel">
