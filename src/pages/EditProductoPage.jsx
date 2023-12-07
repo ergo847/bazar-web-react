@@ -4,64 +4,95 @@ import { Link, useParams } from 'react-router-dom'
 
 const EditProductoPage = () => {
     const { id } = useParams();
-    const [producto, setProducto] = useState(null);
+    const [producto, setProducto] = useState({
+        title: '',
+        description: '',
+        price: 0,
+        discountPercentage: 0,
+        rating: 0,
+        stock: 0,
+        brand: '',
+        category: '',
+        thumbnail: '',
+        images: [],
+    });    
     const urlApi = 'https://bazar-api-laravel-production.up.railway.app/api/';
 
     useEffect(() => {
-        const fetchProducto = async () => {
-            try {
-                const response = await fetch(`${urlApi}productos/${id}`);
-                if (!response.ok) {
-                    throw new Error('Error al obtener detalles del producto');
+        // Check if an ID is present to determine if it's an update or a create operation
+        if (id) {
+            const fetchProducto = async () => {
+                try {
+                    const response = await fetch(`https://bazar-api-laravel-production.up.railway.app/api/productos/${id}`);
+                    if (!response.ok) {
+                        throw new Error('Error al obtener detalles del producto');
+                    }
+    
+                    const data = await response.json();
+                    setProducto(data.data);
+                } catch (error) {
+                    console.error('Error al obtener detalles del producto:', error);
                 }
-
-                const data = await response.json();
-                setProducto(data.data);
-            } catch (error) {
-                console.error('Error al obtener detalles del producto:', error);
-            }
-        };
-
-        fetchProducto();
+            };
+    
+            fetchProducto();
+        } else {
+            // If no ID is present, it's a new product, so initialize an empty state
+            setProducto({
+                title: '',
+                description: '',
+                price: 0,
+                discountPercentage: 0,
+                rating: 0,
+                stock: 0,
+                brand: '',
+                category: '',
+                thumbnail: '',
+                images: ['', '', ''], // Initialize with empty strings for three images
+            });
+        }
     }, [id]);
+    
 
     const handleInputChange = (e) => {
-        setProducto({
-            ...producto,
-            [e.target.name]: e.target.value,
-        });
+        const { name, value } = e.target;
+        setProducto({ ...producto, [name]: value });
+    };
+    
+    const handleInputImgChange = (e) => {
+        /* junta el texto de los 3 inputs de imagen en un array y agregalo al producto */
+        const { name, value } = e.target;
+        const images = [producto.images[0], producto.images[1], producto.images[2]];
+        images[name] = value;
+        console.log(images[name], images);
+        setProducto({ ...producto, images });
     };
 
-    const handleImagesChange = (e) => {
-        // Trata las imágenes como una lista de URLs separadas por saltos de línea
-        const images = e.target.value.split('\n').filter((url) => url.trim() !== '');
-        setProducto({
-            ...producto,
-            images,
-        });
-    };
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log(producto);
         const requestOptions = {
-            method: 'PUT',
+            method: 'POST', // Change the method to POST for creating a new product
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(producto),
         };
-
-        fetch(`${urlApi}productos/${id}`, requestOptions)
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data);
-                alert('Producto actualizado');
-            })
-            .catch((error) => {
-                console.error('Error al actualizar el producto:', error);
-                alert('Error al actualizar el producto');
-            });
+        try {
+            const response = await fetch(`https://bazar-api-laravel-production.up.railway.app/api/productos`, requestOptions);
+            if (!response.ok) {
+                throw new Error('Error al crear el producto');
+            }
+            const data = await response.json();
+            console.log(data);
+            alert('Producto creado');
+        } catch (error) {
+            console.error('Error al crear el producto:', error);
+            alert('Error al crear el producto');
+        }
     };
+    
 
     /* 
+        request:
         {
             "title": "Crystal chandelier maria theresa for 12 light",
             "description": "Crystal chandelier maria theresa for 12 light",
@@ -78,15 +109,61 @@ const EditProductoPage = () => {
                 "https://i.dummyjson.com/data/products/100/3.jpg"
             ]
         }
+
+        response:
+        {
+            "success": true,
+            "message": "Producto encontrado",
+            "data": {
+                "id": 151,
+                "title": "Crystal chandelier maria theresa for 12 light",
+                "description": "Crystal chandelier maria theresa for 12 light",
+                "brand": "YIOSI",
+                "category": "lighting",
+                "thumbnail": "https://i.dummyjson.com/data/products/100/thumbnail.jpg",
+                "price": "47.00",
+                "discountPercentage": "16.00",
+                "rating": "4.74",
+                "stock": 130,
+                "created_at": "2023-12-07T18:19:54.000000Z",
+                "updated_at": "2023-12-07T18:26:16.000000Z",
+                "images": [
+                    {
+                        "id": 669,
+                        "producto_id": 151,
+                        "url": "https://i.dummyjson.com/data/products/100/1.jpg",
+                        "created_at": "2023-12-07T18:26:16.000000Z",
+                        "updated_at": "2023-12-07T18:26:16.000000Z"
+                    },
+                    {
+                        "id": 670,
+                        "producto_id": 151,
+                        "url": "https://i.dummyjson.com/data/products/100/2.jpg",
+                        "created_at": "2023-12-07T18:26:16.000000Z",
+                        "updated_at": "2023-12-07T18:26:16.000000Z"
+                    },
+                    {
+                        "id": 671,
+                        "producto_id": 151,
+                        "url": "https://i.dummyjson.com/data/products/100/3.jpg",
+                        "created_at": "2023-12-07T18:26:16.000000Z",
+                        "updated_at": "2023-12-07T18:26:16.000000Z"
+                    }
+                ]
+            }
+        }
     */
 
     return (
         <div>
+            <h1 className='mt-5'>
+                <i className="fa-solid fa-shop"></i>
+            </h1>
             <h1>
-                <Link to={`/producto/${producto.id}`} className="btn btn-outline-secondary ms-2">
-                <i className="fa-solid fa-arrow-left"></i>
+                <Link to="/productos" className="btn btn-outline-secondary me-2">
+                    <i className="fa-solid fa-arrow-left"></i>
                 </Link>
-                Editar {producto?.title}
+                Editar producto
             </h1>
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
@@ -197,14 +274,33 @@ const EditProductoPage = () => {
                 </div>
 
                 <div className="mb-3">
-                    <label htmlFor="images" className="form-label">Imágenes (una URL por línea)</label>
-                    <textarea
+                    <label htmlFor="images" className="form-label">
+                        Imágenes
+                    </label>
+                    <input
                         className="form-control"
-                        id="images"
-                        name="images"
-                        value={producto?.images ? producto.images.url.join('\n') : ''}
-                        onChange={handleImagesChange}
-                    ></textarea>
+                        id="images1"
+                        name={0}
+                        /* value del primer valor del producto.images */
+                        value={producto?.images[0]}
+                        onChange={handleInputImgChange}
+                    ></input>
+                    <input
+                        className="form-control"
+                        id="images2"
+                        name={1}
+                        /* value del segundo valor del producto.images */
+                        value={producto?.images[1]}
+                        onChange={handleInputImgChange}
+                    ></input>
+                    <input
+                        className="form-control"
+                        id="images3"
+                        name={2}
+                        /* value del tercer valor del producto.images */
+                        value={producto?.images[2]}
+                        onChange={handleInputImgChange}
+                    ></input>
                 </div>
 
                 <button type="submit" className="btn btn-primary">Guardar</button>

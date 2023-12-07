@@ -95,6 +95,9 @@ const ProductosPage = () => {
                         <i className="fa-solid fa-arrow-left"></i>
                     </Link>
                     Listado de Productos
+                    <Link to="/producto/create" className="btn btn-outline-secondary ms-2">
+                        <i className="fa-solid fa-plus"></i>
+                    </Link>
                 </h1>
                 <BuscadorComponent />
                 {renderProductos()}
