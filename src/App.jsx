@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import InicioPage from "./pages/InicioPage";
 import ProductosPage from "./pages/ProductosPage";
 import ProductoPage from "./pages/ProductoPage";
-import NewProductoPage from "./pages/NewProductoPage";
 import EditProductoPage from "./pages/EditProductoPage";
 
 const App = () => {
@@ -19,6 +18,8 @@ const App = () => {
             <Route path="/producto/:id/edit" element={<EditProductoPage />} />
           </Routes>
         </BrowserRouter>
+        {/* espacion vacio */}
+        <div id="vacio" style={{ marginBottom: "2rem" }}></div>
       </div>
     </>
   );

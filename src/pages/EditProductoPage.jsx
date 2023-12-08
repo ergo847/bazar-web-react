@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom'
 
 
@@ -15,26 +15,26 @@ const EditProductoPage = () => {
         category: '',
         thumbnail: '',
         images: [],
-    });    
-    const urlApi = 'https://bazar-api-laravel-production.up.railway.app/api/';
+    });
+    const urlApi = 'https://bazar-api-laravel-production.up.railway.app/api';
 
     useEffect(() => {
         // Check if an ID is present to determine if it's an update or a create operation
         if (id) {
             const fetchProducto = async () => {
                 try {
-                    const response = await fetch(`https://bazar-api-laravel-production.up.railway.app/api/productos/${id}`);
+                    const response = await fetch(`${urlApi}/productos/${id}`);
                     if (!response.ok) {
                         throw new Error('Error al obtener detalles del producto');
                     }
-    
+
                     const data = await response.json();
                     setProducto(data.data);
                 } catch (error) {
                     console.error('Error al obtener detalles del producto:', error);
                 }
             };
-    
+
             fetchProducto();
         } else {
             // If no ID is present, it's a new product, so initialize an empty state
@@ -52,13 +52,13 @@ const EditProductoPage = () => {
             });
         }
     }, [id]);
-    
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setProducto({ ...producto, [name]: value });
     };
-    
+
     const handleInputImgChange = (e) => {
         /* junta el texto de los 3 inputs de imagen en un array y agregalo al producto */
         const { name, value } = e.target;
@@ -78,13 +78,15 @@ const EditProductoPage = () => {
                 body: JSON.stringify(producto),
             };
             try {
-                const response = await fetch(`https://bazar-api-laravel-production.up.railway.app/api/productos/${id}`, requestOptions);
+                const response = await fetch(`${urlApi}/productos/${id}`, requestOptions);
                 if (!response.ok) {
                     throw new Error('Error al actualizar el producto');
                 }
                 const data = await response.json();
                 console.log(data);
                 alert('Producto actualizado');
+                // redireccion a la pagina del producto actualizado
+                window.location.replace(`/productos/${id}`);
             } catch (error) {
                 console.error('Error al actualizar el producto:', error);
                 alert('Error al actualizar el producto');
@@ -96,20 +98,22 @@ const EditProductoPage = () => {
                 body: JSON.stringify(producto),
             };
             try {
-                const response = await fetch(`https://bazar-api-laravel-production.up.railway.app/api/productos`, requestOptions);
+                const response = await fetch(`${urlApi}/productos`, requestOptions);
                 if (!response.ok) {
                     throw new Error('Error al crear el producto');
                 }
                 const data = await response.json();
                 console.log(data);
+                // redireccion a la pagina del producto creado
                 alert('Producto creado');
+                window.location.replace(`/productos/${data.data.id}`);
             } catch (error) {
                 console.error('Error al crear el producto:', error);
                 alert('Error al crear el producto');
             }
         }
     };
-    
+
 
     /* 
         request:
@@ -175,159 +179,137 @@ const EditProductoPage = () => {
     */
 
     return (
-        <div>
-            <h1 className='mt-5'>
-                <i className="fa-solid fa-shop"></i>
-            </h1>
-            <h1>
-                <Link to="/productos" className="btn btn-outline-secondary me-2">
-                    <i className="fa-solid fa-arrow-left"></i>
-                </Link>
-                {/* si existe el id dice editar producto, si no es crear */}
-                {id ? 'Editar' : 'Crear'} producto
-            </h1>
-            <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                    <label htmlFor="title" className="form-label">Título</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="title"
-                        name="title"
-                        value={producto?.title}
-                        onChange={handleInputChange}
-                    />
-                </div>
+        <div className="container mt-5">
+            <div className="row justify-content-center">
+                <div className="col-md-8">
+                    <h1>
+                        <i className="fa-solid fa-shop"></i>
+                    </h1>
+                    <h2>
+                        <Link to={id ? `/productos/${id}` : `/productos/`} className="btn btn-outline-secondary me-2">
+                            <i className="fa-solid fa-arrow-left"></i>
+                        </Link>
+                        {id ? 'Editar' : 'Crear'} producto
+                    </h2>
+                    <form onSubmit={handleSubmit}>
+                        <div className="mb-3">
+                            <label htmlFor="title" className="form-label">Título</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="title"
+                                name="title"
+                                value={producto?.title}
+                                onChange={handleInputChange}
+                            />
+                        </div>
 
-                <div className="mb-3">
-                    <label htmlFor="description" className="form-label">Descripción</label>
-                    <textarea
-                        className="form-control"
-                        id="description"
-                        name="description"
-                        value={producto?.description}
-                        onChange={handleInputChange}
-                    ></textarea>
-                </div>
+                        <div className="mb-3">
+                            <label htmlFor="description" className="form-label">Descripción</label>
+                            <textarea
+                                className="form-control"
+                                id="description"
+                                name="description"
+                                value={producto?.description}
+                                onChange={handleInputChange}
+                            ></textarea>
+                        </div>
 
-                <div className="mb-3">
-                    <label htmlFor="price" className="form-label">Precio</label>
-                    <input
-                        type="number"
-                        className="form-control"
-                        id="price"
-                        name="price"
-                        value={producto?.price}
-                        onChange={handleInputChange}
-                    />
-                </div>
 
-                <div className="mb-3">
-                    <label htmlFor="discountPercentage" className="form-label">Descuento</label>
-                    <input
-                        type="number"
-                        className="form-control"
-                        id="discountPercentage"
-                        name="discountPercentage"
-                        value={producto?.discountPercentage}
-                        onChange={handleInputChange}
-                    />
-                </div>
-                
-                <div className="mb-3">
-                    <label htmlFor="rating" className="form-label">Rating</label>
-                    <input
-                        type="number"
-                        className="form-control"
-                        id="rating"
-                        name="rating"
-                        value={producto?.rating}
-                        onChange={handleInputChange}
-                    />
-                </div>
+                        <div className="mb-3">
+                            <label htmlFor="discountPercentage" className="form-label">Descuento</label>
+                            <input
+                                type="number"
+                                className="form-control"
+                                id="discountPercentage"
+                                name="discountPercentage"
+                                value={producto?.discountPercentage}
+                                onChange={handleInputChange}
+                            />
+                        </div>
 
-                <div className="mb-3">
-                    <label htmlFor="stock" className="form-label">Stock</label>
-                    <input
-                        type="number"
-                        className="form-control"
-                        id="stock"
-                        name="stock"
-                        value={producto?.stock}
-                        onChange={handleInputChange}
-                    />
+                        <div className="mb-3">
+                            <label htmlFor="rating" className="form-label">Rating</label>
+                            <input
+                                type="number"
+                                className="form-control"
+                                id="rating"
+                                name="rating"
+                                value={producto?.rating}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+
+                        <div className="mb-3">
+                            <label htmlFor="stock" className="form-label">Stock</label>
+                            <input
+                                type="number"
+                                className="form-control"
+                                id="stock"
+                                name="stock"
+                                value={producto?.stock}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+
+                        <div className="mb-3">
+                            <label htmlFor="brand" className="form-label">Marca</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="brand"
+                                name="brand"
+                                value={producto?.brand}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+
+                        <div className="mb-3">
+                            <label htmlFor="category" className="form-label">Categoría</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="category"
+                                name="category"
+                                value={producto?.category}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+
+                        <div className="mb-3">
+                            <label htmlFor="thumbnail" className="form-label">Thumbnail</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="thumbnail"
+                                name="thumbnail"
+                                value={producto?.thumbnail}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+
+                        <div className="mb-3">
+                            <label htmlFor="images" className="form-label">Imágenes</label>
+                            {[0, 1, 2].map((index) => (
+                                <input
+                                    key={index}
+                                    className="form-control mb-2"
+                                    id={`images${index + 1}`}
+                                    name={index}
+                                    value={producto?.images[index]}
+                                    onChange={handleInputImgChange}
+                                />
+                            ))}
+                        </div>
+
+                        <div className="mb-3">
+                            <button type="submit" className="btn btn-primary" id='guardar-producto'>Guardar</button>
+                        </div>
+                    </form>
                 </div>
-
-                <div className="mb-3">
-                    <label htmlFor="brand" className="form-label">Marca</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="brand"
-                        name="brand"
-                        value={producto?.brand}
-                        onChange={handleInputChange}
-                    />
-                </div>
-
-                <div className="mb-3">
-                    <label htmlFor="category" className="form-label">Categoría</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="category"
-                        name="category"
-                        value={producto?.category}
-                        onChange={handleInputChange}
-                    />
-                </div>
-
-                <div className="mb-3">
-                    <label htmlFor="thumbnail" className="form-label">Thumbnail</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="thumbnail"
-                        name="thumbnail"
-                        value={producto?.thumbnail}
-                        onChange={handleInputChange}
-                    />
-                </div>
-
-                <div className="mb-3">
-                    <label htmlFor="images" className="form-label">
-                        Imágenes
-                    </label>
-                    <input
-                        className="form-control"
-                        id="images1"
-                        name={0}
-                        /* value del primer valor del producto.images */
-                        value={producto?.images[0]}
-                        onChange={handleInputImgChange}
-                    ></input>
-                    <input
-                        className="form-control"
-                        id="images2"
-                        name={1}
-                        /* value del segundo valor del producto.images */
-                        value={producto?.images[1]}
-                        onChange={handleInputImgChange}
-                    ></input>
-                    <input
-                        className="form-control"
-                        id="images3"
-                        name={2}
-                        /* value del tercer valor del producto.images */
-                        value={producto?.images[2]}
-                        onChange={handleInputImgChange}
-                    ></input>
-                </div>
-
-                <button type="submit" className="btn btn-primary">Guardar</button>
-
-            </form>
+            </div>
         </div>
+
     );
 };
 

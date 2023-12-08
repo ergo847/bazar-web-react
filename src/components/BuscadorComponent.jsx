@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 const BuscadorComponent = () => {
     const navigate = useNavigate();
     const [query, setQuery] = useState('');
-    const [page, setPage] = useState(1);
+    const [page] = useState(1);
 
     const handleInputChange = (event) => {
         setQuery(event.target.value);
@@ -19,6 +19,7 @@ const BuscadorComponent = () => {
         <div className="input-group mb-3">
             <input
                 type="text"
+                id='search'
                 className="form-control"
                 placeholder="Buscar"
                 aria-label="Buscar"

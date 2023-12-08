@@ -48,17 +48,32 @@ const ProductosPage = () => {
     const renderProductos = () => {
         return (
             <div className="row">
+                {/* si no hay productos poner un div que dice que no hy registrls */}
+
+                {productos.length === 0 && (
+                    <div className="col-12">
+                        <div id='sin-productos' className="alert alert-info">
+                            No hay productos registrados.
+                        </div>
+                    </div>
+                )}
+
                 {productos.map((producto) => (
                     <div key={producto.id} className="col-md-4 mb-4">
                         <div className="card">
-                            <img src={producto.thumbnail} className="card-img-top d-block w-100 img-height-fixed" alt={producto.title} />
+                            <img
+                                src={producto.thumbnail}
+                                className="card-img-top img-fluid"
+                                alt={producto.title}
+                                style={{ objectFit: 'contain', maxHeight: '200px' }}
+                            />
                             <div className="card-body">
                                 <h5 className="card-title">{producto.title}</h5>
                                 <p className="card-text">{producto.description}</p>
-                                <p className="card-text">Categoria: {producto.category}</p>
+                                <p className="card-text">Categoría: {producto.category}</p>
                                 <p className="card-text">Precio: ${producto.price}</p>
                                 <EstrellasRatingComponent rating={parseFloat(producto.rating)} />
-                                <Link to={`/productos/${producto.id}`} className="btn btn-outline-secondary m-1">
+                                <Link to={`/productos/${producto.id}`} className="btn btn-outline-secondary m-1 ver-producto">
                                     Ver Detalles
                                 </Link>
                             </div>
@@ -66,6 +81,7 @@ const ProductosPage = () => {
                     </div>
                 ))}
             </div>
+
         );
     };
 
@@ -96,7 +112,7 @@ const ProductosPage = () => {
                     </Link>
                     Listado de Productos
                     <Link to="/producto/create" className="btn btn-outline-secondary ms-2">
-                        <i className="fa-solid fa-plus"></i>
+                        <i className="fa-solid fa-plus" id='agregar-producto'></i>
                     </Link>
                 </h1>
                 <BuscadorComponent />

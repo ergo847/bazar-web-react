@@ -26,29 +26,54 @@ const ProductoPage = () => {
         fetchProducto();
     }, [id]);
 
+    /* funcion para boton de borrar */
+    const handleDelete = async () => {
+        try {
+            const response = await fetch(`https://bazar-api-laravel-production.up.railway.app/api/productos/${id}`, {
+                method: 'DELETE',
+            });
+            if (!response.ok) {
+                throw new Error('Error al borrar producto');
+            }
+
+            // Redirige a la ruta de productos
+            window.location.href = '/productos';
+        } catch (error) {
+            console.error('Error al borrar producto:', error);
+            // Puedes manejar el error según tus necesidades
+        }
+    }
+
     return (
-        <div>
+        <div className="container mt-5">
             {producto ? (
-                <>
-                    <h1 className='mt-5'>
+                <div>
+                    <h1>
                         <i className="fa-solid fa-shop"></i>
                     </h1>
-                    <h1>
+                    <h2>
                         <Link to="/productos" className="btn btn-outline-secondary me-2">
                             <i className="fa-solid fa-arrow-left"></i>
                         </Link>
                         {producto.title}
-                        {/* link to productos/id/edit */}
-                        <Link to={`/producto/${producto.id}/edit`} className="btn btn-outline-secondary ms-2">
+                        <Link to={`/producto/${producto.id}/edit`} className="btn btn-outline-secondary ms-2" id='producto-editar'>
                             <i className="fa-solid fa-edit"></i>
                         </Link>
-                    </h1>
+                        <button className="btn btn-outline-danger ms-2 eliminar-producto" onClick={handleDelete}>
+                            <i className="fa-solid fa-trash"></i>
+                        </button>
+                    </h2>
                     {producto.images.length > 0 ? (
-                        <div id="carouselExampleControls" className="carousel slide" data-bs-ride="carousel">
+                        <div id="carouselExampleControls" className="carousel slide mb-4" data-bs-ride="carousel">
                             <div className="carousel-inner">
                                 {producto.images.map((image, index) => (
                                     <div key={index} className={`carousel-item${index === 0 ? ' active' : ''}`}>
-                                        <img src={image} className="d-block w-100 img-height-fixed" alt={`Imagen ${index}`} />
+                                        <img
+                                            src={image}
+                                            className="d-block w-100 img-fluid"
+                                            style={{ maxHeight: '400px', objectFit: 'contain', margin: 'auto' }}
+                                            alt={`Imagen ${index}`}
+                                        />
                                     </div>
                                 ))}
                             </div>
@@ -62,7 +87,7 @@ const ProductoPage = () => {
                             </button>
                         </div>
                     ) : (
-                        <p>No hay imágenes disponibles.</p>
+                        <p className="mb-4">No hay imágenes disponibles.</p>
                     )}
                     <EstrellasRatingComponent rating={parseFloat(producto.rating)} />
                     <p><span className="fw-bold">Descripción: </span>{producto.description}</p>
@@ -72,11 +97,12 @@ const ProductoPage = () => {
                     <p className='text-danger'><span className="fw-bold">Descuento: </span>{producto.discountPercentage}%</p>
                     <p><span className="fw-bold">Stock: </span>{producto.stock}</p>
                     <button className="btn btn-primary">Comprar</button>
-                </>
+                </div>
             ) : (
                 <p>Cargando detalles del producto...</p>
             )}
         </div>
+
     );
 };
 

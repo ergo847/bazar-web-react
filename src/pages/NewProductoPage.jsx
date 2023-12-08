@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom'
 
 const NewProductoPage = () => {
@@ -14,13 +14,13 @@ const NewProductoPage = () => {
         category: '',
         thumbnail: '',
         images: [],
-    });    
-    const urlApi = 'https://bazar-api-laravel-production.up.railway.app/api/';
+    });
+    const urlApi = 'https://bazar-api-laravel-production.up.railway.app/api';
 
     useEffect(() => {
         const fetchProducto = async () => {
             try {
-                const response = await fetch(`https://bazar-api-laravel-production.up.railway.app/api/productos/${id}`);
+                const response = await fetch(`${urlApi}/productos/${id}`);
                 if (!response.ok) {
                     throw new Error('Error al obtener detalles del producto');
                 }
@@ -39,7 +39,7 @@ const NewProductoPage = () => {
         const { name, value } = e.target;
         setProducto({ ...producto, [name]: value });
     };
-    
+
     const handleInputImgChange = (e) => {
         /* junta el texto de los 3 inputs de imagen en un array y agregalo al producto */
         const { name, value } = e.target;
@@ -58,7 +58,7 @@ const NewProductoPage = () => {
             body: JSON.stringify(producto),
         };
         try {
-            const response = await fetch(`https://bazar-api-laravel-production.up.railway.app/api/productos/${id}`, requestOptions);
+            const response = await fetch(`${urlApi}/productos/${id}`, requestOptions);
             if (!response.ok) {
                 throw new Error('Error al actualizar el producto');
             }
@@ -140,7 +140,7 @@ const NewProductoPage = () => {
                 <i className="fa-solid fa-shop"></i>
             </h1>
             <h1>
-                <Link to="/productos" className="btn btn-outline-secondary me-2">
+                <Link to={`/productos/${id}`} className="btn btn-outline-secondary me-2">
                     <i className="fa-solid fa-arrow-left"></i>
                 </Link>
                 Editar producto
@@ -192,7 +192,7 @@ const NewProductoPage = () => {
                         onChange={handleInputChange}
                     />
                 </div>
-                
+
                 <div className="mb-3">
                     <label htmlFor="rating" className="form-label">Rating</label>
                     <input
